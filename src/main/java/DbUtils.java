@@ -336,4 +336,34 @@ public class DbUtils {
         return textInfos;
     }
 
+    public static List<String> getNames() {
+        ArrayList<String> textInfos = new ArrayList<>();
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:sqlite:src/main/resources/synsets_ua.db");
+            stmt = conn.createStatement();
+            String sql = "SELECT * FROM text";
+            ResultSet resultSet = stmt.executeQuery(sql);
+            while (resultSet.next()) {
+                textInfos.add(resultSet.getString("text_name"));
+            }
+        } catch (Exception se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null)
+                    conn.close();
+            } catch (SQLException ignored) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return textInfos;
+    }
+
 }
